@@ -8,6 +8,11 @@ Two phases, each with its own progress file. Update the phase file, then add a d
 | Models + training | Not started. Decide data loader + first model. | `models/PROGRESS.md` (create with the first model work) |
 
 ## Session log
+- **2026-10-23 (later)** — Status review of the 2000 finished runs: all meshes complete, logs clean.
+  Two data-quality questions before training, both in `FMsims/PROGRESS.md` next steps: the
+  compensated TSC painting leaves 14-31% of cells with delta < -1 at a > 0.5, and `deltadot` is a
+  one-sided (mid, right) difference. Both need a user decision; fixing either means repainting
+  `mesh/` for all 2000 runs from the snapshots (still on scratch).
 - **2026-10-23** — Repo bookkeeping: wrote `CLAUDE.md`, this index, `doc/sim_workflow.md`; brought
   `FMsims/PROGRESS.md` up to date (batch 2 finished 2026-05-27; FastPM outputs gone); added
   `.gitignore` and untracked build products, binaries, slurm logs, notebook checkpoints and the 5000

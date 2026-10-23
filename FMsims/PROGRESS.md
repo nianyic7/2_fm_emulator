@@ -74,7 +74,18 @@ spectrum, growth rate, continuity equation).
       the centred (a_left, a_right) pair that the triplet scheme and the notebooks assume. Check
       whether this is intended (one-sided, half the step) before training on `deltadot`; if the centred
       difference is wanted, recompute `mesh/` from the snapshots (snapshots are still on scratch).
+- [ ] **Compensated TSC painting makes `delta` unphysical at late times** (found 2026-10-23):
+      `create_delta_deltadot_mesh.py` paints with `compensated=True` (window deconvolution), which
+      amplifies shot noise near the Nyquist scale. In the production meshes 14% of cells have
+      delta < -1 at a = 0.52 and 29-31% at a > 0.9 (min delta -50 to -74); without compensation
+      min delta = -1 exactly (checked on run-0000 snap at a = 0.906: comp+interlaced std 3.46, 20% of
+      cells < -1; plain TSC std 1.81, 0%). Decide before training: repaint without compensation (or
+      compensate only in Fourier space for power spectra), then recompute `mesh/` for all 2000 runs
+      (~6 h per 200 runs). `deltadot` inherits the same noise.
 - [ ] Spot-check production meshes against linear theory for a few runs (never done on production).
+- Verified 2026-10-23: all 2000 runs have 40 mesh files and a clean `log`; 92 runs have 60 snapshots
+  instead of 61 only because their last output time (~0.9996) coincides with TimeMax, so no separate
+  a = 1 snapshot is written. Not a problem.
 - [ ] Clarify what happened to the FastPM outputs; rerun only if the Gadget4-vs-FastPM comparison is
       still wanted.
 - [ ] **git size**: the initial commit (pushed) holds 184 MB of `build/` objects, `Gadget4` binaries,
