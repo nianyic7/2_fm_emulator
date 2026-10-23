@@ -23,9 +23,7 @@ then the phase file for the phase you are working on. How to launch/post-process
   FastPM `~/fastpm`, MP-Gadget `~/MP-Gadget` (the last two were only used for the code comparison).
 - Python: conda env `nbodykit-env` for all mesh/post-processing scripts (nbodykit, h5py, bigfile).
   Scripts import `load_basics` from `~/utils` (on `PYTHONPATH` via `~/.bashrc`).
-- Git remote `origin` = git@github.com:nianyic7/2_fm_emulator.git (`main`). `~/.gitconfig` sets the
-  commit identity to a different person (Biwei Dai); check `git config user.name` before committing
-  if attribution matters.
+- Git remote `origin` = git@github.com:nianyic7/2_fm_emulator.git (`main`).
 
 ## Layout
 - `FMsims/L400_n128_s40/` — **production Gadget4 suite** (400 Mpc/h, 128^3, 2LPT ICs, Planck15, 5000 seeds).
