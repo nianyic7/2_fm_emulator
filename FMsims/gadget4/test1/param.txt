@@ -1,0 +1,100 @@
+        InitCondFile                                      ../dummy
+        OutputDir                                         ./output
+        SnapshotFileBase                                  snap
+
+        TimeLimitCPU                                      28800
+
+        ICFormat                                          3
+        SnapFormat                                        3
+
+        ComovingIntegrationOn                             1
+
+        NumFilesPerSnapshot                               1
+
+        TimeBegin                                         0.02
+        TimeMax                                           1.0 
+
+        Omega0                                            0.3089
+        OmegaLambda                                       0.6911
+        OmegaBaryon                                       0.0486
+	OmegaCurvature                                    0
+        HubbleParam                                       0.6774
+        Hubble                                            100.0
+	
+        BoxSize                                           384.0
+
+        OutputListFilename                                ./outputs.txt
+        OutputListOn                                      0
+        TimeBetSnapshot                                   1.1
+        TimeOfFirstSnapshot                               0.1
+
+        CpuTimeBetRestartFile                             14400
+        TimeBetStatistics                                 0.25
+
+        MaxSizeTimestep                                   0.01
+        MinSizeTimestep                                   0
+        ErrTolIntAccuracy                                 0.05
+
+        TypeOfOpeningCriterion                            1
+        ErrTolTheta                                       0.6
+        ErrTolForceAcc                                    0.0025
+	ErrTolThetaMax                                    0.9
+        
+        TopNodeFactor                                     3.5
+
+        ActivePartFracForNewDomainDecomp                  0.01
+        ActivePartFracForPMinsteadOfEwald                 0.01
+
+        MaxFilesWithConcurrentIO                          64
+
+        MaxMemSize                                        4000
+        DesNumNgb                                         64
+        MaxNumNgbDeviation                                1
+        ArtBulkViscConst                                  1
+        InitGasTemp                                       108.76
+        MinEgySpec                                        0
+        CourantFac                                        0.15
+
+%        DesLinkNgb                                        20
+
+
+        SofteningComovingClass0                            0.09
+        SofteningComovingClass1                            0.09
+        SofteningComovingClass2                            0
+        SofteningComovingClass3                            0
+        SofteningComovingClass4                            0
+        SofteningComovingClass5                            0
+	
+        SofteningMaxPhysClass0                             0.09
+        SofteningMaxPhysClass1                             0.09
+        SofteningMaxPhysClass2                             0
+        SofteningMaxPhysClass3                             0
+        SofteningMaxPhysClass4                             0
+        SofteningMaxPhysClass5                             0
+
+
+	SofteningClassOfPartType0  0
+	SofteningClassOfPartType1  1 
+	SofteningClassOfPartType2  2
+	SofteningClassOfPartType3  3
+	SofteningClassOfPartType4  4
+	SofteningClassOfPartType5  5
+
+
+        UnitLength_in_cm                                  3.08568e+24
+        UnitMass_in_g                                     1.989e+43
+        UnitVelocity_in_cm_per_s                          100000
+        GravityConstantInternal                           0
+
+
+	GridSize                                          128
+	SphereMode                                        1
+	PowerSpectrumType                                 2
+	ReNormalizeInputSpectrum                          1
+	PrimordialIndex                                   1.0
+	ShapeGamma                                        0.201
+	Sigma8                                            0.8159
+	PowerSpectrumFile                                 input_spectrum_PLANCK15.txt
+	InputSpectrum_UnitLength_in_cm                    3.085678e24
+	Seed                                              181170
+	

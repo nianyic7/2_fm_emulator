@@ -1,0 +1,53 @@
+#These parameters are the Planck 2015 cosmology, see the final column of Table 4 of 1502.01589 
+#
+#Used in Illustris TNG (except that they normalize to z=0 sigma_8 and we normalise at z=99 
+#and include with massive neutrinos).
+
+# Directory for output
+OutputDir = ICS
+# Base-filename of output files
+FileBase = IC
+
+#Big run
+Ngrid = 128
+BoxSize = 400
+Nmesh = 128
+#Cosmology parameters
+Omega0 = 0.3089
+OmegaLambda = 0.6911
+OmegaBaryon = 0.0486
+Sigma8 = 0.8159
+# 0 is dm only. 1 is gas
+ProduceGas = 0
+RadiationOn = 1
+
+# Hubble paramater (may be used for power spec parameterization)
+HubbleParam = 0.6774
+
+# "2" selects a tabulated power spectrum in
+# the file 'FileWithInputSpectrum'
+# otherwise, Eisenstein & Hu parametrization is used
+WhichSpectrum = 2
+InputPowerRedshift = 0
+DifferentTransferFunctions = 0
+MaxMemSizePerNode = 0.2
+
+Redshift = 99
+FileWithInputSpectrum = /home/nianyic/FMsims/mpgadget/ic/linearpowerspec_Planck15_noneutrino.txt
+# filename of tabulated input
+# spectrum (if used)
+
+#  seed for IC-generator
+Seed = 181170
+UnitaryAmplitude = 0
+MNue = 0.0
+MNum = 0.0
+MNut = 0.0
+SavePrePos = 0
+ShowBacktrace = 0
+PrimordialIndex = 0.9667
+
+PrePosGridCenter = 1
+ScaleDepVelocity = 0
+
+UnitLength_in_cm = 3.08568e+24

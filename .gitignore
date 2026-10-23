@@ -1,0 +1,20 @@
+# build products and binaries
+**/build/
+**/Gadget4
+**/compile.log
+# tables Gadget4 regenerates on first run
+ewald_table_*.dat
+# slurm / run logs
+slurm*.out
+**/log
+**/log-*
+# generated FastPM param files (python gen_luafile.py reproduces them from template.lua)
+FMsims/L400_n128_s40_fastpm/paramfile/
+# verbose test logs
+test_logs/
+# editor / notebook junk
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.claude/
+.superpowers/
