@@ -52,3 +52,9 @@ then the phase file for the phase you are working on. How to launch/post-process
   layout; do not assume. Routine script mechanics need no question.
 - Tests (phase 2): tests before implementation, <=5 lines of stdout on success, verbose output to
   `test_logs/`, no fudge factors.
+
+## Dashboard status (`STATUS.md`)
+`STATUS.md` feeds the private dashboard (`nianyic7/lab-dashboard`).
+- At the end of every session, update its front matter and `## Latest summary`: set `last_update`, keep `stage` to one of `running | analyzing | needs-input | blocked | next-steps-agreed | done`, and keep the field names unchanged. Pull before editing. Commit it on its own and push with `scripts/push_status.sh` (no need to ask).
+- At a decision point, open a GitHub issue from the "Input needed" template (label `needs-input`), set `stage: needs-input` and fill in `decision_needed`.
+- Deadlines: you may add an entry, marked `by: agent`. Never remove or change an entry without that mark: those are set by the user.
