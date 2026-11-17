@@ -8,6 +8,10 @@ Two phases, each with its own progress file. Update the phase file, then add a d
 | Models + training | Design agreed 2026-11-17 (`doc/specs/2026-11-17-phase2-fm-emulator-design.md`): flow-matching emulator, `phi = delta/D -> u = dphi/dD`, periodic 3D U-Net, forward + backward rollout. No code yet. | `models/PROGRESS.md` |
 
 ## Session log
+- **2026-11-17** — Converted the deltadot notebooks into `FMsims/deltadot_tests/` (5 scripts, one per
+  design question, PDFs in `plots/`). Outcome: stored forward-stencil `deltadot` is fine (<= 2 % from
+  centred, r >= 0.9997 at k < 0.5), FD is span-converged (0.02-0.085), matches the continuity
+  equation and linear theory. Decision: keep the 2000 meshes. Spec 5.1 marked done.
 - **2026-11-16/17** — Phase-2 brainstorming. Decisions: keep the compensated-TSC meshes and the
   finite-difference `deltadot` as stored (no repaint); model = flow-matching velocity field in the
   (D, phi = delta/D) parametrisation, i.e. `deltadot` minus its linear prediction; periodic 3D U-Net

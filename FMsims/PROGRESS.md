@@ -74,12 +74,14 @@ Decisions of 2026-11-16/17 (phase-2 brainstorming, see `../doc/specs/2026-11-17-
 - **deltadot definition**: keep finite differencing. The (a_mid, a_right) stencil has no recorded
   reason (the convergence notebook used centred pairs, plain TSC and d/dt); keep it unless the check
   below says otherwise.
-- [ ] **Stencil check on run-0000** (spec 5.1): forward vs centred `deltadot` for two triplets
-      (a ~ 0.5 and a > 0.9), P(k) and r(k); also P(deltadot) vs (f/a)^2 P(delta) on large scales.
-      Recompute `mesh/` for all 2000 runs only if they differ by more than a few per cent.
+- [x] **Stencil check on run-0000** (spec 5.1), done 2026-11-17 in `deltadot_tests/` (README has the
+      numbers): forward (stored) vs centred `deltadot` agree to <= 2 % in P(k), r >= 0.9997 for
+      k < 0.5; FD converged for spans 0.02-0.085; FD == continuity equation (r = 1.000); linear
+      theory matched on large scales at a <= 0.17. **Keep the meshes.** The old notebooks are
+      superseded by these scripts.
 - [ ] **a = 1 meshes** (spec 5.2): paint `delta_N128_a1.000000.npy` for every run from the last
       snapshot (same painter/settings). Needed as forward target and backward starting point.
-- [ ] Spot-check production meshes against linear theory for a few runs (never done on production).
+- [x] Spot-check production meshes against linear theory: done for run-0000 (2026-11-17, `deltadot_tests/test_fd_stencil.py`, right column of the plot): P(deltadot)/[(f/a)^2 P(delta)] = 1.00 +- 0.01 on the largest scales.
 - Verified 2026-10-23: all 2000 runs have 40 mesh files and a clean `log`; 92 runs have 60 snapshots
   instead of 61 only because their last output time (~0.9996) coincides with TimeMax, so no separate
   a = 1 snapshot is written. Not a problem.

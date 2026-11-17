@@ -15,7 +15,8 @@ Spec agreed. No code yet. Next: implementation plan (writing-plans), then step b
 
 ## Next steps
 - [ ] Implementation plan from the spec.
-- [ ] Stencil check on run-0000 (spec 5.1) and a = 1 meshes for all runs (spec 5.2), in `FMsims/`.
+- [x] Stencil check on run-0000 (spec 5.1): done 2026-11-17, keep meshes (`FMsims/deltadot_tests/`).
+- [ ] a = 1 meshes for all runs (spec 5.2), in `FMsims/`.
 - [ ] `fm-torch` conda env; `fmemu` package skeleton with tests; `growth.py` verified against the sims.
 - [ ] Data pipeline, U-Net, training on 100 runs, evaluation, rollouts.
 

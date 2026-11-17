@@ -24,7 +24,7 @@ the velocity is regressed. The data in `FMsims/` were designed for this: each ru
 |---|---|---|
 | Mesh painting | Keep compensated TSC + interlacing as stored (cells with delta < -1 exist) | User decision 2026-11-16: the model should emulate the stored fields as produced; no repaint. |
 | deltadot definition | Keep finite differencing from snapshots (no velocity-divergence) | Validated in `gadget4/compare_dt_convergence.ipynb`; user decision 2026-11-16. |
-| FD stencil | Pending a quantitative check (section 5.1). Default: keep the stored (a_mid, a_right) forward difference | No recorded reason for the forward stencil; see section 8.1. |
+| FD stencil | **Keep the stored (a_mid, a_right) forward difference** (checked 2026-11-17, section 5.1) | Forward vs centred agree to <= 2 % in P(k) and r >= 0.9997 for k < 0.5 h/Mpc; see section 8.1. |
 | Model task | `phi(D) -> u = d phi / d D`, i.e. deltadot minus its linear-theory prediction | Nonlinear residual only; linear growth handled analytically (section 3). |
 | Baseline | `deltadot_lin = f(a)/a * delta(x, a)` applied to the current field | Needs only stored meshes; backup option: subtract linear prediction only below a `k_lin` in Fourier space. |
 | Time variable / state | `D(a)` and `phi = delta / D` | Flow starts at rest on the Gaussian field; most cosmology-independent form (section 8.2). |
@@ -79,14 +79,16 @@ Painting scripts stay in `FMsims/` and in `nbodykit-env`. Checkpoints, logs and 
 
 ## 5. Data products to add (in `FMsims/`, nbodykit env)
 
-### 5.1 Stencil check on run-0000
-Paint, for two triplets of run-0000 (one at a ~ 0.5, one at a > 0.9), the forward difference
-`(delta(a_right) - delta(a_mid)) / (a_right - a_mid)` as stored and the centred difference
-`(delta(a_right) - delta(a_left)) / (a_right - a_left)`. Compare `P(k)` and `r(k)` of the two, and
-`P(deltadot)` against `(f/a)^2 P(delta)` on large scales (the production spot-check against linear
-theory that was never done). Decision rule: if the two stencils agree to within a few per cent in
-`P(k)` and `r(k) > 0.99` to `k ~ 0.5 h/Mpc`, keep the stored meshes; otherwise recompute `deltadot`
-for all 2000 runs with the centred stencil (~60 h of mesh jobs; snapshots are on scratch).
+### 5.1 Stencil check on run-0000 — done 2026-11-17, PASS
+Scripted in `FMsims/deltadot_tests/` (`test_fd_stencil.py`, `test_fd_dt_convergence.py`,
+`test_fd_vs_continuity.py`, `test_da_triplet_spacing.py`; results in its README and `plots/`).
+Forward (stored) vs centred `deltadot` on run-0000 triplets at a = 0.057-0.90: `|dP/P| <= 2 %`,
+`r >= 0.9997` for k < 0.5 h/Mpc; the stored files equal the forward stencil exactly; FD agrees with
+the continuity equation (`r = 1.000`, `P` ratio 1.003) and with linear theory on large scales
+(`P(deltadot)/[(f/a)^2 P(delta)] = 1.00` at a <= 0.17), which also validates the growth-factor
+code. Decision: **keep the 2000 meshes as they are.** Known, accepted systematic: the forward
+stencil underestimates the derivative by 0.3-0.8 % in amplitude (O(da) truncation, linear theory),
+the same at all k; a rollout integrated with the learned velocity inherits it.
 
 ### 5.2 a = 1 mesh for every run
 `delta_N128_a1.000000.npy` in each `run-XXXX/mesh/`, painted from the last snapshot with the same
@@ -139,7 +141,8 @@ principled argument for the forward stencil is discrete consistency with time st
 `delta(a_mid) + (a_right - a_mid) deltadot = delta(a_right)` exactly, so a forward-Euler step of
 the learned velocity reproduces the next snapshot. For the *instantaneous* derivative that an ODE
 solver wants, the centred difference is the better estimate (error O(da^2) vs O(da), the forward
-bias being ~ (da/2) delta''). Section 5.1 quantifies the difference before training.
+bias being ~ (da/2) delta''). Quantified 2026-11-17 (section 5.1): the difference is 1-2 % in power at late times, consistent with the
+linear-theory estimate, and `r >= 0.9997`; the stored stencil is kept.
 
 ### 8.2 Cosmology dependence and generalisation
 The suite has a single cosmology (Planck15, Neff = 0), so any model trained on it is a
@@ -173,7 +176,7 @@ three other cosmologies, evaluated without retraining. If transfer is poor, the 
 cosmology and the network gets the parameters as input; the 2000 Planck15 runs remain the anchor.
 
 ### 8.3 Risks
-- Forward-difference bias in `u` at late times (5.1).
+- Forward-difference bias in `u` at late times: measured at 0.3-0.8 % in amplitude (5.1); accepted.
 - Growth-factor mismatch with Gadget4 leaves a linear residual at low k (caught by metric 7.1).
 - Backward integration amplifies small-scale errors (measured by 7.3, not hidden).
 - Compensated-TSC noise is inherited by `u`; the model must learn to emulate it as part of the data.
