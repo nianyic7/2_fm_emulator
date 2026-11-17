@@ -66,22 +66,19 @@ spectrum, growth rate, continuity equation).
   and `fastpm/` tests: only used for the comparison; not part of the pipeline.
 
 ## Next steps / open questions
-- [ ] **Decide the suite size**: run run-2000..run-4999 (3000 more, ~30 node-jobs of 22 h, +11 TB) or
-      stop at 2000. Scratch is at 89%; snapshots could be deleted after meshing (keep `mesh/`,
-      `output-a-list.txt`, `param.txt`, `outputs.txt`, `reverse_index.txt`, `log`) to free ~3.3 GB/run.
-      Ask the user before deleting anything.
-- [ ] **deltadot finite-difference stencil**: `create_delta_deltadot_mesh.py` uses (a_mid, a_right), not
-      the centred (a_left, a_right) pair that the triplet scheme and the notebooks assume. Check
-      whether this is intended (one-sided, half the step) before training on `deltadot`; if the centred
-      difference is wanted, recompute `mesh/` from the snapshots (snapshots are still on scratch).
-- [ ] **Compensated TSC painting makes `delta` unphysical at late times** (found 2026-10-23):
-      `create_delta_deltadot_mesh.py` paints with `compensated=True` (window deconvolution), which
-      amplifies shot noise near the Nyquist scale. In the production meshes 14% of cells have
-      delta < -1 at a = 0.52 and 29-31% at a > 0.9 (min delta -50 to -74); without compensation
-      min delta = -1 exactly (checked on run-0000 snap at a = 0.906: comp+interlaced std 3.46, 20% of
-      cells < -1; plain TSC std 1.81, 0%). Decide before training: repaint without compensation (or
-      compensate only in Fourier space for power spectra), then recompute `mesh/` for all 2000 runs
-      (~6 h per 200 runs). `deltadot` inherits the same noise.
+Decisions of 2026-11-16/17 (phase-2 brainstorming, see `../doc/specs/2026-11-17-phase2-fm-emulator-design.md`):
+- **Suite size**: run-2000..run-4999 deferred until the first model shows it is data-limited.
+  Snapshots stay on scratch for now (needed for the stencil check and the a = 1 meshes below).
+- **Compensated TSC painting (delta < -1 cells)**: keep as stored; the model emulates the fields as
+  produced. No repaint.
+- **deltadot definition**: keep finite differencing. The (a_mid, a_right) stencil has no recorded
+  reason (the convergence notebook used centred pairs, plain TSC and d/dt); keep it unless the check
+  below says otherwise.
+- [ ] **Stencil check on run-0000** (spec 5.1): forward vs centred `deltadot` for two triplets
+      (a ~ 0.5 and a > 0.9), P(k) and r(k); also P(deltadot) vs (f/a)^2 P(delta) on large scales.
+      Recompute `mesh/` for all 2000 runs only if they differ by more than a few per cent.
+- [ ] **a = 1 meshes** (spec 5.2): paint `delta_N128_a1.000000.npy` for every run from the last
+      snapshot (same painter/settings). Needed as forward target and backward starting point.
 - [ ] Spot-check production meshes against linear theory for a few runs (never done on production).
 - Verified 2026-10-23: all 2000 runs have 40 mesh files and a clean `log`; 92 runs have 60 snapshots
   instead of 61 only because their last output time (~0.9996) coincides with TimeMax, so no separate
@@ -99,4 +96,4 @@ spectrum, growth rate, continuity equation).
 - Notebooks: `gadget4/*.ipynb`, `L400_n128_s40/test_da_values.ipynb`, `L400_n128_s40_fastpm/test_p2m.ipynb`
 
 ---
-*Last updated: 2026-10-23*
+*Last updated: 2026-11-17*

@@ -2,12 +2,19 @@
 
 Two phases, each with its own progress file. Update the phase file, then add a dated line here.
 
-| Phase | Status (2026-10-23) | File |
+| Phase | Status (2026-11-17) | File |
 |---|---|---|
 | Simulations | 2000 / 5000 Gadget4 runs done with meshes (run-0000..run-1999, 7.8 TB on scratch). FastPM comparison outputs lost. | `FMsims/PROGRESS.md` |
-| Models + training | Not started. Decide data loader + first model. | `models/PROGRESS.md` (create with the first model work) |
+| Models + training | Design agreed 2026-11-17 (`doc/specs/2026-11-17-phase2-fm-emulator-design.md`): flow-matching emulator, `phi = delta/D -> u = dphi/dD`, periodic 3D U-Net, forward + backward rollout. No code yet. | `models/PROGRESS.md` |
 
 ## Session log
+- **2026-11-16/17** — Phase-2 brainstorming. Decisions: keep the compensated-TSC meshes and the
+  finite-difference `deltadot` as stored (no repaint); model = flow-matching velocity field in the
+  (D, phi = delta/D) parametrisation, i.e. `deltadot` minus its linear prediction; periodic 3D U-Net
+  first; metrics T(k), r(k) plus forward and backward ODE rollouts; h200 partition; Gaussian endpoint
+  = earliest stored mesh for now (exact a = 0.01 ICs regenerated later); remaining 3000 sims deferred.
+  Cosmology-generalisation reasoning and references recorded in the spec (section 8.2). Open: the
+  (a_mid, a_right) stencil has no recorded reason; to be quantified on run-0000 before training.
 - **2026-10-23 (later)** — Status review of the 2000 finished runs: all meshes complete, logs clean.
   Two data-quality questions before training, both in `FMsims/PROGRESS.md` next steps: the
   compensated TSC painting leaves 14-31% of cells with delta < -1 at a > 0.5, and `deltadot` is a
